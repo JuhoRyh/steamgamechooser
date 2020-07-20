@@ -3,21 +3,19 @@ import axios from 'axios'
 import { Col, Card } from 'react-bootstrap'
 
 const GameCard = (props) => {
-  const [appInfo, setAppInfo] = useState()
-  const [ready, setReady] = useState(false)
+  const [appInfo, setAppInfo] = useState({})
   const appid = props.game.appid
-
 
   useEffect(() => {
     axios.get(`http://localhost:3001/steamapps/${appid}`).then(res => {
       setAppInfo(res.data)
-      setReady(true)
     })
-  },[])
+  }, [appid])
+
 
   return (
-      <Col>
-       {ready ? 
+    <Col>
+      {appInfo[appid] !== undefined ?
         <Card>
           <Card.Img variant="top" src={appInfo[appid].data.header_image} />
           <Card.Body>
@@ -25,7 +23,7 @@ const GameCard = (props) => {
             <Card.Text></Card.Text>
           </Card.Body>
         </Card> : null}
-      </Col>
+    </Col>
   )
 }
 

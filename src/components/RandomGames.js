@@ -5,7 +5,7 @@ import GameCard from './GameCard'
 const RandomGames = (props) => {
   const games = props.games
 
-  return(
+  return (
     <Col className="gamesContainer">
       <Row className="justify-content-center">
         <Col className="subtitleContainer">
@@ -15,7 +15,7 @@ const RandomGames = (props) => {
       </Row>
       <Row className="justify-content-center cardContainer">
         {games.map(game => {
-          return<GameCard game={game} />
+          return <GameCard key={game.appid} game={game} />
         })}
       </Row>
     </Col>

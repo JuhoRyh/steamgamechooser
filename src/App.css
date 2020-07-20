@@ -13,10 +13,6 @@ html {
   color: #c7d5e0;
 }
 
-.gridContainer {
-  background-color: #171e21;
-}
-
 .title {
   color: #c7d5e0;
   font-size: 2rem;
@@ -24,8 +20,7 @@ html {
 }
 
 .subtitleContainer {
-  color: #c7d5e0;
-  justify-content: center;
+  color: #c7d5e0; 
   padding: 1rem;
 }
 .subtitle {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { Container, Col, Row, Form, Button } from 'react-bootstrap';
@@ -13,24 +13,27 @@ const App = () => {
   const [numberOfPossible, setNumberOfPossible] = useState(0)
   const [error, setError] = useState(false)
 
+  //Sends steamID to backend which will give the accounts games
   const onSubmitHandler = (event) => {
     setRandomGames([])
     event.preventDefault()
-    if(steamID.length < 1){
+    if (steamID.length < 1) {
       setError(true)
-    }else{
+    } else {
       axios.get(`http://localhost:3001/steamuser/${steamID}`).then(res => {
-      const games = res.data
-
-      if(res.data.response.game_count > 0){
-        getGames(games)
-        setError(false)
-      }else{
-        setError(true)
-      }})
+        const games = res.data
+        //if we have access to account the games will go towards to next function
+        if (res.data.response.game_count > 0) {
+          getGames(games)
+          setError(false)
+        } else {
+          setError(true)
+        }
+      })
     }
   }
 
+  //Simple functions to save user input
   const changeSteamID = (event) => {
     setSteamID(event.target.value)
   }
@@ -53,49 +56,47 @@ const App = () => {
     }
   }
 
-
+  //Function looks through the accounts games and gives three random games with the allowed limitations
   const getGames = (games) => {
-
-    console.log(games)
     const gamesArray = games
-    if(gamesArray.response == undefined){
-      console.log('vittu')
-    }else{
+    //First loops through the array to exclude the games with either too many or too little hours set by the user input
+    if (gamesArray.response !== undefined) {
       const filteredGames = gamesArray.response.games.filter(game => {
-      if (game.playtime_forever > minHours && game.playtime_forever < maxHours) {
-        return game
-      } else {
-        return null
-      }
-    })
-
-    setNumberOfPossible(filteredGames.length)
-
-
-
-    if (filteredGames.length !== null) {
-      console.log('ei sopivia')
-    } else if (filteredGames.length <= 3) {
-      setRandomGames(filteredGames)
-    } else {
-      let randomArray = []
-      while (randomArray.length < 3) {
-        let rand = Math.floor(Math.random() * filteredGames.length)
-        if (randomArray.indexOf(rand) === -1) {
-          randomArray.push(rand)
-        }
-      }
-      const threeGames = filteredGames.filter(game => {
-        if (randomArray.includes(filteredGames.indexOf(game))) {
+        if (game.playtime_forever > minHours && game.playtime_forever < maxHours) {
           return game
+        } else {
+          return null
         }
       })
-      setRandomGames(threeGames)
+
+      setNumberOfPossible(filteredGames.length)
+
+      //If we have three or less matches we return them, if over five we make an array with three random unique games (no duplicates)
+      if (filteredGames.length !== null) {
+        if (filteredGames.length <= 3) {
+          setRandomGames(filteredGames)
+        } else {
+          let randomArray = []
+          while (randomArray.length < 3) {
+            let rand = Math.floor(Math.random() * filteredGames.length)
+            if (randomArray.indexOf(rand) === -1) {
+              randomArray.push(rand)
+            }
+          }
+          const threeGames = filteredGames.filter(game => {
+            if (randomArray.includes(filteredGames.indexOf(game))) {
+              return game
+            } else {
+              return null
+            }
+          })
+          setRandomGames(threeGames)
+        }
+      }
     }
   }
-}
   return (
-    <div class="gridContainer">
+    <div className="mainContainer">
       <Container className="mainContainer">
         <Row>
           <Col className="title">SteamGameChooser</Col>
@@ -105,7 +106,7 @@ const App = () => {
             <Form.Group as={Col}>
               <Form.Label>Enter Your SteamID</Form.Label>
               <Form.Control type="text" placeholder="Steam ID" value={steamID} onChange={changeSteamID} />
-              <Form.Text muted>Your Steam account must be public for this to work.</Form.Text>
+              <Form.Text muted>Steam account must be public for this to work.</Form.Text>
             </Form.Group>
           </Form.Row>
           <Form.Row>
