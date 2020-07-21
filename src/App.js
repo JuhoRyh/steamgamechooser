@@ -20,7 +20,7 @@ const App = () => {
     if (steamID.length < 1) {
       setError(true)
     } else {
-      axios.get(`http://localhost:3001/steamuser/${steamID}`).then(res => {
+      axios.get(`/steamuser/${steamID}`).then(res => {
         const games = res.data
         //if we have access to account the games will go towards to next function
         if (res.data.response.game_count > 0) {
@@ -29,6 +29,8 @@ const App = () => {
         } else {
           setError(true)
         }
+      }).catch(error => {
+        setError(true)
       })
     }
   }

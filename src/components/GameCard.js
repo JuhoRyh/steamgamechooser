@@ -7,7 +7,7 @@ const GameCard = (props) => {
   const appid = props.game.appid
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/steamapps/${appid}`).then(res => {
+    axios.get(`/steamapps/${appid}`).then(res => {
       setAppInfo(res.data)
     })
   }, [appid])
@@ -15,7 +15,7 @@ const GameCard = (props) => {
 
   return (
     <Col>
-      {appInfo[appid] !== undefined ?
+      {appInfo[appid] !== undefined && appInfo[appid].success === true ?
         <Card>
           <Card.Img variant="top" src={appInfo[appid].data.header_image} />
           <Card.Body>
