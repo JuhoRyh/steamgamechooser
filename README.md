@@ -8,7 +8,7 @@ View on [Heroku](https://blooming-citadel-73130.herokuapp.com/).
 ## Reflection
 - Technologies used: React.js, create-react-app, react-bootstrap
 
-### Bugs
+### Known bugs
 - If the app can't be found in the steamworks API it will leave a gap in the results.
 
 Backend repository can be found [here](https://github.com/JuhoRyh/steamgamechooserserver)
